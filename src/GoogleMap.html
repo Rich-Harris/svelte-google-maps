@@ -1,0 +1,32 @@
+<div ref:container>
+	<!-- map is rendered here -->
+</div>
+
+<style>
+	ref:container {
+		width: 100%;
+		height: 300px;
+	}
+</style>
+
+<script>
+	export default {
+		oncreate() {
+			// here, we're only binding to a couple of values.
+			// but we could use as much or as little of the
+			// Google Maps API as we want
+			this.map = new google.maps.Map(this.refs.container, {
+				zoom: this.get('zoom'),
+				center: this.get('center')
+			});
+
+			this.observe('center', center => {
+				this.map.setCenter(center);
+			}, { init: false });
+
+			this.observe('zoom', zoom => {
+				this.map.setZoom(zoom);
+			}, { init: false });
+		}
+	};
+</script>

@@ -1,0 +1,53 @@
+<h1>here is a map</h1>
+
+<button on:click='findMe()'>find me</button>
+<input type='range' bind:value='zoom' min=2 max=18 step=1> zoom {{zoom}}
+
+{{#if err}}
+	<p class='error'>error using geolocation</p>
+{{/if}}
+
+{{#if ready}}
+	<GoogleMap center={{center}} zoom={{zoom}}/>
+{{/if}}
+
+<style>
+	.error {
+		color: #d00;
+	}
+</style>
+
+<script>
+	import GoogleMap from './GoogleMap.html';
+
+	export default {
+		components: {
+			GoogleMap
+		},
+
+		methods: {
+			findMe() {
+				navigator.geolocation.getCurrentPosition(
+					pos => {
+						this.set({
+							err: null,
+							center: {
+								lat: pos.coords.latitude,
+								lng: pos.coords.longitude
+							}
+						});
+					},
+					err => {
+						this.set({ err });
+					}
+				);
+			}
+		},
+
+		data() {
+			return {
+				err: null
+			};
+		}
+	};
+</script>
